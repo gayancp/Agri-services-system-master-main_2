@@ -403,7 +403,7 @@ const ServiceBrowserPage = () => {
 
             {/* Quick Filters */}
             <div className="flex flex-wrap gap-2">
-              {/* <select
+              { <select
                 value={filters.serviceType}
                 onChange={(e) => handleFilterChange('serviceType', e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -413,9 +413,9 @@ const ServiceBrowserPage = () => {
                     {option.label}
                   </option>
                 ))}
-              </select> */}
+              </select> }
 
-              {/* <select
+              { <select
                 value={`${filters.sortBy}-${filters.sortOrder}`}
                 onChange={(e) => {
                   const [sortBy, sortOrder] = e.target.value.split('-');
@@ -428,7 +428,7 @@ const ServiceBrowserPage = () => {
                     {option.label}
                   </option>
                 ))}
-              </select> */}
+              </select> }
 
               {/* Filter Toggle */}
               {/* <button
