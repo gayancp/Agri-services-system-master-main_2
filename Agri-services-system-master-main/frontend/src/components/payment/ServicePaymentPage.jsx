@@ -96,6 +96,8 @@ const ServicePaymentPage = () => {
     // Cardholder name validation
     if (!paymentForm.cardholderName.trim()) {
       errors.cardholderName = 'Cardholder name is required';
+    } else if (!/^[A-Za-z\s]+$/.test(paymentForm.cardholderName.trim())) {
+      errors.cardholderName = 'Cardholder name can only contain letters and spaces';
     }
 
     // Billing address validation
@@ -109,7 +111,9 @@ const ServicePaymentPage = () => {
       errors.state = 'State/Province is required';
     }
     if (!paymentForm.billingAddress.zipCode.trim()) {
-      errors.zipCode = 'ZIP/Postal code is required';
+  errors.zipCode = 'ZIP/Postal code is required';
+    } else if (paymentForm.billingAddress.zipCode.length !== 5) {
+      errors.zipCode = 'ZIP/Postal code must be 5 digits';
     }
 
     setValidationErrors(errors);
@@ -433,7 +437,12 @@ const ServicePaymentPage = () => {
                     <input
                       type="text"
                       value={paymentForm.cardholderName}
-                      onChange={(e) => handleInputChange('cardholderName', e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // remove everything except letters and spaces
+                        const cleaned = value.replace(/[^A-Za-z\s]/g, '').slice(0, 50);
+                        handleInputChange('cardholderName', cleaned);
+                      }}
                       placeholder="John Doe"
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                         validationErrors.cardholderName ? 'border-red-500' : 'border-gray-300'
@@ -458,7 +467,12 @@ const ServicePaymentPage = () => {
                     <input
                       type="text"
                       value={paymentForm.billingAddress.street}
-                      onChange={(e) => handleBillingAddressChange('street', e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Allow letters, numbers, spaces, and common symbols; limit to 100 chars
+                        const cleaned = value.replace(/[^A-Za-z0-9\s,./#-]/g, '').slice(0, 100);
+                        handleBillingAddressChange('street', cleaned);
+                      }}
                       placeholder="123 Main Street"
                       className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                         validationErrors.street ? 'border-red-500' : 'border-gray-300'
@@ -477,7 +491,12 @@ const ServicePaymentPage = () => {
                       <input
                         type="text"
                         value={paymentForm.billingAddress.city}
-                        onChange={(e) => handleBillingAddressChange('city', e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only letters, spaces, and hyphens
+                          const cleaned = value.replace(/[^A-Za-z\s-]/g, '');
+                          handleBillingAddressChange('city', cleaned).slice(0, 50);
+                        }}
                         placeholder="Colombo"
                         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                           validationErrors.city ? 'border-red-500' : 'border-gray-300'
@@ -495,7 +514,12 @@ const ServicePaymentPage = () => {
                       <input
                         type="text"
                         value={paymentForm.billingAddress.state}
-                        onChange={(e) => handleBillingAddressChange('state', e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only letters, spaces, and hyphens
+                          const cleaned = value.replace(/[^A-Za-z\s-]/g, '').slice(0, 50);
+                          handleBillingAddressChange('state', cleaned);
+                        }}
                         placeholder="Western Province"
                         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                           validationErrors.state ? 'border-red-500' : 'border-gray-300'
@@ -515,7 +539,12 @@ const ServicePaymentPage = () => {
                       <input
                         type="text"
                         value={paymentForm.billingAddress.zipCode}
-                        onChange={(e) => handleBillingAddressChange('zipCode', e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only numbers
+                          const cleaned = value.replace(/[^0-9]/g, '').slice(0, 5);
+                          handleBillingAddressChange('zipCode', cleaned);
+                        }}
                         placeholder="00100"
                         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                           validationErrors.zipCode ? 'border-red-500' : 'border-gray-300'

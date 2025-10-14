@@ -38,6 +38,7 @@ const OrdersPage = () => {
     time: '',
     notes: ''
   });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -270,6 +271,11 @@ Thank you for using our Agricultural Services platform!
     );
   }
 
+    // Filter bookings by service title (case-insensitive)
+  const filteredBookings = bookings.filter((b) =>
+    b.serviceDetails?.title?.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -283,24 +289,32 @@ Thank you for using our Agricultural Services platform!
         </button>
       </div>
 
-      {/* Filters */}
-      {/* <div className="mb-6">
-        <div className="flex items-center space-x-4">
-          <Filter className="w-5 h-5 text-gray-600" />
-          <select 
-            value={statusFilter} 
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="all">All Bookings</option>
-            <option value="pending_confirmation">Pending Confirmation</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+      {/* Search bar (search by service name) */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="relative w-full max-w-md">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Filter className="w-4 h-4 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by service name..."
+            className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => setSearchTerm('')}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              aria-label="Clear search"
+            >
+              <XCircle className="w-5 h-5" />
+            </button>
+          )}
         </div>
-      </div> */}
+      </div>
+
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -308,20 +322,21 @@ Thank you for using our Agricultural Services platform!
         </div>
       )}
 
-      {bookings.length === 0 ? (
-        <div className="text-center py-12">
-          <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-600 mb-2">No bookings found</h3>
-          <p className="text-gray-500">
-            {statusFilter === 'all' 
-              ? "You haven't made any service bookings yet." 
-              : `No bookings with status "${statusFilter.replace('_', ' ')}" found.`
-            }
-          </p>
-        </div>
+      {filteredBookings.length === 0 ? (
+      <div className="text-center py-12">
+        <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-gray-600 mb-2">No matching bookings</h3>
+        <p className="text-gray-500">
+          {searchTerm
+            ? `No services found matching "${searchTerm}".`
+            : statusFilter === 'all'
+            ? "You haven't made any service bookings yet."
+            : `No bookings with status "${statusFilter.replace('_', ' ')}" found.`}
+        </p>
+      </div>
       ) : (
-        <div className="grid gap-6">
-          {bookings.map((booking) => (
+    <div className="grid gap-6">
+          {filteredBookings.map((booking) => (
             <div key={booking._id} className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -447,6 +462,7 @@ Thank you for using our Agricultural Services platform!
                         Delete
                       </button>
                     )}
+
                   </div>
                 </div>
               </div>

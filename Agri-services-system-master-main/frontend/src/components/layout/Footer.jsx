@@ -12,11 +12,10 @@ const Footer = () => {
               <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">🌱</span>
               </div>
-              <span className="text-xl font-bold">AgriServices</span>
+              <span className="text-xl font-bold">GoviSaviya</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
-              Connecting farmers, suppliers, and buyers in Sri Lanka's agricultural ecosystem. 
-              Fresh produce, quality equipment, and sustainable farming solutions.
+              Empowering Sri Lankan farms with quality machinery, services and sustainable practices.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-300 hover:text-green-400 transition-colors">
@@ -90,7 +89,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-gray-300">
-            © 2024 AgriServices. All rights reserved. Built with ❤️ for Sri Lankan agriculture.
+            © 2025 AgriServices. All rights reserved. Built with ❤️ for Sri Lankan agriculture.
           </p>
         </div>
       </div>

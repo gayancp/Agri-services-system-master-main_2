@@ -18,6 +18,10 @@
   .btn {
     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 disabled:pointer-events-none disabled:opacity-50;
   }
+
+  .btn-temp{
+    @apply btn bg-green-600 text-white hover:bg-green-700 px-6 py-2 ml-4;
+  }
   
   .btn-primary {
     @apply btn bg-green-600 text-white hover:bg-green-700 px-6 py-2;
