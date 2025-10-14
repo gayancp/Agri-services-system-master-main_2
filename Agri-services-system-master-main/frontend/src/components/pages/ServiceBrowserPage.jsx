@@ -431,7 +431,7 @@ const ServiceBrowserPage = () => {
               </select> }
 
               {/* Filter Toggle */}
-              {/* <button
+              {  <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`inline-flex items-center px-3 py-2 border text-sm font-medium rounded-md ${
                   showFilters
@@ -441,7 +441,7 @@ const ServiceBrowserPage = () => {
               >
                 <SlidersHorizontal className="w-4 h-4 mr-2" />
                 Filters
-              </button> */}
+              </button> }
 
               {/* View Mode Toggle */}
               <div className="flex border border-gray-300 rounded-md">
