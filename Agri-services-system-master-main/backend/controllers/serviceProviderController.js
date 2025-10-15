@@ -2,6 +2,11 @@ const User = require('../models/User');
 const ServiceBooking = require('../models/ServiceBooking');
 const ServiceListing = require('../models/ServiceListing');
 const mongoose = require('mongoose');
+const PDFDocument = require('pdfkit');
+
+let dashboardStats = {};
+let bookingsMade = {};
+let totalBookings = 0;
 
 // Get service provider dashboard
 const getServiceProviderDashboard = async (req, res) => {
@@ -52,7 +57,7 @@ const getServiceProviderDashboard = async (req, res) => {
       ServiceListing.countDocuments({ serviceProvider: providerId })
     ]);
 
-    const dashboardStats = {
+    dashboardStats = {
       // Service statistics only
       totalServiceBookings,
       pendingServiceBookings,
@@ -110,7 +115,7 @@ const getMyServiceBookings = async (req, res) => {
     const sortOptions = {};
     sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
 
-    const [bookings, total] = await Promise.all([
+    let [bookings, total] = await Promise.all([
       ServiceBooking.find(query)
         .populate('customer', 'firstName lastName email phone')
         .populate('serviceListing', 'title serviceType pricing photos')
@@ -119,6 +124,9 @@ const getMyServiceBookings = async (req, res) => {
         .limit(parseInt(limit)),
       ServiceBooking.countDocuments(query)
     ]);
+
+    bookingsMade = bookings;
+    totalBookings = total;
 
     res.json({
       success: true,
@@ -250,10 +258,239 @@ const updateProviderProfile = async (req, res) => {
     });
   }
 };
+/*
+const generateReport = async (req, res) => {
+
+  try {
+
+    const providerId = new mongoose.Types.ObjectId(req.user.userId);
+
+    const bookings = await ServiceBooking.find({
+      serviceProvider: providerId
+    })
+      .populate('customer', 'firstName')
+      .populate('serviceListing', 'title');
+
+    const doc = new PDFDocument();
+    const buffers = [];
+
+    const pdfBuffer = await new Promise((resolve, reject) => {
+        // Set up event listeners
+        doc.on('data', (chunk) => buffers.push(chunk));
+        doc.on('end', () => {
+          const pdfData = Buffer.concat(buffers);
+          resolve(pdfData);
+        });
+        doc.on('error', (error) => {
+          reject(error);
+        });
+
+        // PDF Content
+        doc.fontSize(20).text('Summary Report', { align: 'center' });
+        doc.moveDown(1);
+
+        doc.fontSize(15).text('Overview', { underline: true });
+        doc.moveDown(0.5);
+        
+        doc.fontSize(12)
+          .text(`Total Service Bookings: ${dashboardStats.totalServiceBookings || 0}`);
+        doc.moveDown(0.3);
+
+        doc.fontSize(12)
+          .text(`Pending Bookings: ${dashboardStats.pendingServiceBookings || 0}`);
+        doc.moveDown(0.3);
+
+        doc.fontSize(12)
+          .text(`Confirmed Bookings: ${dashboardStats.confirmedServiceBookings || 0}`);
+        doc.moveDown(0.3);
+
+        doc.fontSize(12)
+          .text(`Total Service Revenue: Rs${dashboardStats.serviceRevenue || 0}`);
+        doc.moveDown(1);
+
+        doc.fontSize(15).text('Service Listings', { underline: true });
+        doc.moveDown(0.5);
+
+        doc.fontSize(12)
+          .text(`Total Service Listings: ${dashboardStats.totalServiceListings || 0}`);
+        doc.moveDown(0.3);
+
+        doc.fontSize(12)
+          .text(`Active Service Listings: ${dashboardStats.activeServiceListings || 0}`);
+        doc.moveDown(1);
+
+        doc.fontSize(15).text('Recent Service Bookings', { underline: true });
+        doc.moveDown(0.5);
+
+        // Add actual booking data
+        /*if (bookings.length > 0) {
+          bookings.slice(0, 10).forEach((booking, index) => { // Show last 10 bookings
+            doc.fontSize(10)
+              .text(`${index + 1}. ${booking.serviceListing?.title || 'N/A'} - ${booking.customer?.firstName || 'Customer'} - Status: ${booking.status}`);
+            doc.moveDown(0.2);
+          });
+        } else {
+          doc.fontSize(10).text('No bookings found for the selected period.');
+        }
+
+        // Finalize PDF
+        doc.end();
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=service-report-${Date.now()}.pdf`);
+        res.send(pdfBuffer);
+      });
+
+  } catch (error) {
+      res.status(500).json({ error: 'Report generation failed' });
+  }
+
+}
+*/
+
+const generateReport = async (req, res) => {
+  try {
+    const providerId = new mongoose.Types.ObjectId(req.user.userId);
+
+    // Fetch current data instead of relying on global variables
+    const [
+      bookings,
+      totalServiceBookings,
+      pendingServiceBookings,
+      confirmedServiceBookings,
+      serviceRevenue,
+      totalServiceListings,
+      activeServiceListings,
+      serviceListings
+    ] = await Promise.all([
+      ServiceBooking.find({ serviceProvider: providerId })
+        .populate('customer', 'firstName')
+        .populate('serviceListing', 'title'),
+      ServiceBooking.countDocuments({ serviceProvider: providerId }),
+      ServiceBooking.countDocuments({ 
+        serviceProvider: providerId, 
+        status: 'pending_confirmation'
+      }),
+      ServiceBooking.countDocuments({ 
+        serviceProvider: providerId, 
+        status: { $in: ['confirmed', 'in_progress'] }
+      }),
+      ServiceBooking.aggregate([
+        { 
+          $match: { 
+            serviceProvider: providerId, 
+            'payment.status': 'paid' 
+          } 
+        },
+        { $group: { _id: null, total: { $sum: '$pricing.finalAmount' } } }
+      ]),
+      ServiceListing.countDocuments({ serviceProvider: providerId }),
+      ServiceListing.countDocuments({ serviceProvider: providerId, isActive: true }),
+      ServiceListing.find({ serviceProvider: providerId })
+    ]);
+
+    const doc = new PDFDocument();
+    const buffers = [];
+
+    const pdfBuffer = await new Promise((resolve, reject) => {
+      // Set up event listeners
+      doc.on('data', (chunk) => buffers.push(chunk));
+      doc.on('end', () => {
+        const pdfData = Buffer.concat(buffers);
+        resolve(pdfData);
+      });
+      doc.on('error', (error) => {
+        reject(error);
+      });
+
+      // PDF Content
+      doc.fontSize(20).text('Summary Report', { align: 'center' });
+      doc.moveDown(0.5);
+
+      doc.fontSize(20).text('==============================', { align: 'center' });
+      doc.moveDown(0.5);
+
+      doc.fontSize(15).text('Overview', { underline: true });
+      doc.moveDown(0.5);
+      
+      doc.fontSize(12)
+        .text(`Total Service Bookings: ${totalServiceBookings || 0}`);
+      doc.moveDown(0.3);
+
+      doc.fontSize(12)
+        .text(`Pending Bookings: ${pendingServiceBookings || 0}`);
+      doc.moveDown(0.3);
+
+      doc.fontSize(12)
+        .text(`Confirmed Bookings: ${confirmedServiceBookings || 0}`);
+      doc.moveDown(0.3);
+
+      const revenue = serviceRevenue[0]?.total || 0;
+      doc.fontSize(12)
+        .text(`Total Service Revenue: Rs ${revenue.toLocaleString()}`);
+      doc.moveDown(1);
+
+      doc.fontSize(15).text('My Listing Statistics', { underline: true });
+      doc.moveDown(0.5);
+
+      doc.fontSize(12)
+        .text(`Total Service Listings: ${totalServiceListings || 0}`);
+      doc.moveDown(0.3);
+
+      doc.fontSize(12)
+        .text(`Active Service Listings: ${activeServiceListings || 0}`);
+      doc.moveDown(1);
+
+      doc.fontSize(15).text('Service Bookings', { underline: true });
+      doc.moveDown(0.5);
+
+      // Add actual booking data
+      if (bookings.length > 0) {
+        bookings.forEach((booking, index) => {
+          doc.fontSize(12)
+            .text(`${index + 1}. ${booking.serviceListing?.title || 'N/A'} - ${booking.customer?.firstName || 'Customer'} - Status: ${booking.status}`);
+          doc.moveDown(0.2);
+        });
+      } else {
+        doc.fontSize(12).text('No bookings found.');
+      }
+      doc.moveDown(1);
+
+      doc.fontSize(15).text('My Service Listings', { underline: true });
+      doc.moveDown(0.5);
+
+      if (serviceListings.length > 0) {   
+        serviceListings.forEach((listing, index) => {
+          doc.fontSize(12)
+            .text(`${index + 1}. ${listing.title || 'N/A'} - Title: ${listing.serviceType || 'N/A'} - Status: ${listing.status}`);
+          doc.moveDown(0.2);
+        }); 
+      } else {
+        doc.fontSize(12).text('No listings found.');
+      }
+
+      // Finalize PDF
+      doc.end();
+    });
+
+    // Set response headers and send PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=service-report-${Date.now()}.pdf`);
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error('Report generation error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Report generation failed: ' + error.message 
+    });
+  }
+};
 
 module.exports = {
   getServiceProviderDashboard,
   getMyServiceBookings,
   updateServiceBookingStatus,
-  updateProviderProfile
+  updateProviderProfile,
+  generateReport
 };

@@ -82,6 +82,35 @@ const ServiceProviderDashboard = () => {
     }
   };
 
+  const downloadReport = async () => {
+    try {
+      const token = Cookies.get('token');
+      const response = await fetch('http://localhost:5001/api/service-provider/generate-report', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const pdfBlob = await response.blob();
+        const url = window.URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `service-report-${Date.now()}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+      else{
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to generate report');
+      }
+
+    } catch (error) {
+        console.error('Download error:', error);
+        setError('Network error occurred');
+    }};
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -107,6 +136,11 @@ const ServiceProviderDashboard = () => {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Service Provider Dashboard</h1>
         <p className="text-gray-600">Welcome back, {user?.firstName} {user?.lastName}</p>
       </div>
+      <button
+          className="btn-primary text-lg px-8 py-3 mb-6"
+          onClick={downloadReport}>
+          Download Report
+      </button>
 
       {/* Tab Navigation */}
       <div className="border-b border-gray-200 mb-6">

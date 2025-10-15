@@ -113,8 +113,7 @@ const HomePage = () => {
           ) : (
             <Link 
               to="/dashboard" 
-              className="btn-primary text-lg px-8 py-3"
-            >
+              className="btn-primary text-lg px-8 py-3">
               Go to Dashboard
             </Link>
           )}

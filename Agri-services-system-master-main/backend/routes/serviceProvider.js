@@ -5,7 +5,8 @@ const {
   getServiceProviderDashboard,
   getMyServiceBookings,
   updateServiceBookingStatus,
-  updateProviderProfile
+  updateProviderProfile,
+  generateReport
 } = require('../controllers/serviceProviderController');
 
 // All service provider routes require authentication and service provider role
@@ -21,5 +22,8 @@ router.patch('/service-bookings/:bookingId/status', updateServiceBookingStatus);
 
 // Profile Management
 router.patch('/profile', updateProviderProfile);
+
+//get report generation data
+router.get('/generate-report', generateReport);
 
 module.exports = router;
