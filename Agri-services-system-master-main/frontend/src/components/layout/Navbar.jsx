@@ -35,12 +35,11 @@ const Navbar = () => {
             >
               Services
             </Link>
-            {/* <Link 
-              to="/forum" 
+             <Link to="/forum" 
               className="text-gray-700 hover:text-green-600 font-medium transition-colors"
             >
               Forum
-            </Link> */}
+            </Link> 
             {/* Products link removed */}
             
             {isAuthenticated ? (
@@ -118,12 +117,11 @@ const Navbar = () => {
                     >
                       Submit Ticket
                     </Link>
-                    {/* <Link 
-                      to="/forum" 
+                     <Link to="/forum" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Forum
-                    </Link> */}
+                    </Link> 
                     <button 
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

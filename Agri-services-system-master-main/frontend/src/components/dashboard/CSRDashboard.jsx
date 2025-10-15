@@ -610,16 +610,7 @@ const CSRDashboard = () => {
             >
               Overview
             </button>
-            {/* <button
-              onClick={() => setActiveTab('orders')}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'orders'
-                  ? 'border-green-500 text-green-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Order Management
-            </button> */}
+            
             <button
               onClick={() => setActiveTab('tickets')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -644,12 +635,7 @@ const CSRDashboard = () => {
                 icon="🎫"
                 bgColor="bg-blue-500"
               />
-              {/* <StatCard
-                title="Pending Orders"
-                value={dashboardData.pendingTickets}
-                icon="⏳"
-                bgColor="bg-yellow-500"
-              /> */}
+              
               <StatCard
                 title="Resolved Cases"
                 value={dashboardData.resolvedTickets}
@@ -666,28 +652,6 @@ const CSRDashboard = () => {
 
             {/* Recent Activity */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Pending Orders */}
-              {/* <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-4">Pending Orders</h3>
-                <div className="space-y-3">
-                  {dashboardData.pendingOrders?.map((order) => (
-                    <div key={order._id} className="flex items-center justify-between p-3 bg-yellow-50 rounded">
-                      <div>
-                        <p className="font-medium">Order #{order.orderNumber}</p>
-                        <p className="text-sm text-gray-600">
-                          {order.buyer?.firstName} {order.buyer?.lastName}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">LKR {order.totalAmount}</p>
-                        <span className="text-xs text-yellow-600">
-                          {order.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div> */}
 
               {/* Recent Customer Queries */}
               <div className="bg-white rounded-lg shadow-md p-6">
@@ -765,28 +729,16 @@ const CSRDashboard = () => {
                       <td className="px-4 py-2">
                         {formatTicketDate(ticket.createdAt)}
                       </td>
+                     
                       <td className="px-4 py-2">
+
                         <button
                           onClick={() => fetchTicketDetails(ticket._id)}
                           className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 mr-2"
                         >
                           View
                         </button>
-                        <select
-                          onChange={(e) => {
-                            if (e.target.value) {
-                              updateTicketStatus(ticket._id, e.target.value);
-                              e.target.value = '';
-                            }
-                          }}
-                          className="text-xs bg-gray-100 border border-gray-300 rounded px-2 py-1"
-                          defaultValue=""
-                        >
-                          <option value="">Update Status</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="waiting_customer">Waiting Customer</option>
-                          <option value="resolved">Resolved</option>
-                        </select>
+                        
                       </td>
                     </tr>
                   ))}
@@ -808,9 +760,7 @@ const CSRDashboard = () => {
           </div>
         )}
 
-        {/* Order Update Modal */}
-        <OrderUpdateModal />
-
+        
         {/* Ticket Detail Modal */}
         <TicketDetailModal />
       </div>

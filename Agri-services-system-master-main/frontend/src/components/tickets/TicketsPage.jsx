@@ -187,11 +187,14 @@ const TicketsPage = () => {
               Delete Ticket
             </h3>
             <p className="text-sm text-gray-500 mb-6">
-              Are you sure you want to delete this ticket? This action cannot be undone.
+              Are you sure you want to delete this ticket?
             </p>
+
+            
             <p className="text-sm font-medium text-gray-700 mb-6">
               "{showDeleteConfirm.title}"
             </p>
+
           </div>
           <div className="flex space-x-3">
             <button
@@ -264,76 +267,8 @@ const TicketsPage = () => {
               </div>
             </div>
 
-            {/* Description */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-900 whitespace-pre-wrap">{selectedTicket.description}</p>
-              </div>
-            </div>
-
-            {/* Assigned To */}
-            {selectedTicket.assignedTo && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Assigned To</label>
-                <div className="bg-blue-50 rounded-lg p-3">
-                  <p className="text-blue-900 font-medium">
-                    {selectedTicket.assignedTo.firstName} {selectedTicket.assignedTo.lastName}
-                  </p>
-                  <p className="text-blue-700 text-sm">{selectedTicket.assignedTo.email}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Attachments */}
-            {selectedTicket.attachments && selectedTicket.attachments.length > 0 && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Attachments</label>
-                <div className="space-y-2">
-                  {selectedTicket.attachments.map((attachment, index) => (
-                    <div key={index} className="flex items-center p-2 bg-gray-50 rounded">
-                      <svg className="h-5 w-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-sm text-gray-700">{attachment.originalName}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Comments */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-4">Comments & Updates</label>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {selectedTicket.comments && selectedTicket.comments.length > 0 ? (
-                  selectedTicket.comments.map((comment, index) => (
-                    <div key={index} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex items-center">
-                          <span className="font-medium text-gray-900">
-                            {comment.author.firstName} {comment.author.lastName}
-                          </span>
-                          {comment.author.role === 'customer_service' && (
-                            <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
-                              Support Team
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-sm text-gray-500">
-                          {formatDate(comment.timestamp)}
-                        </span>
-                      </div>
-                      <p className="text-gray-700 whitespace-pre-wrap">{comment.message}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No comments yet</p>
-                )}
-              </div>
-            </div>
-
-            {/* Add Comment */}
+            
+            
             {selectedTicket.status !== 'closed' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Add Comment</label>
@@ -398,7 +333,7 @@ const TicketsPage = () => {
               to="/tickets/new"
               className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
-              Submit New Ticket
+              Submit  New Ticket
             </Link>
           </div>
         </div>
@@ -408,64 +343,9 @@ const TicketsPage = () => {
             {error}
           </div>
         )}
+        
 
-        {/* Filters */}
-        {/* <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Filter Tickets</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-              >
-                <option value="">All Statuses</option>
-                <option value="open">Open</option>
-                <option value="assigned">Assigned</option>
-                <option value="in_progress">In Progress</option>
-                <option value="waiting_customer">Waiting for Customer</option>
-                <option value="resolved">Resolved</option>
-                <option value="closed">Closed</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-              <select
-                value={filters.priority}
-                onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-              >
-                <option value="">All Priorities</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="urgent">Urgent</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Issue Type</label>
-              <select
-                value={filters.issueType}
-                onChange={(e) => setFilters(prev => ({ ...prev, issueType: e.target.value }))}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-              >
-                <option value="">All Types</option>
-                <option value="technical_issue">Technical Issue</option>
-                <option value="payment_problem">Payment Problem</option>
-                <option value="order_inquiry">Order Inquiry</option>
-                <option value="service_complaint">Service Complaint</option>
-                <option value="account_issue">Account Issue</option>
-                <option value="product_question">Product Question</option>
-                <option value="billing_inquiry">Billing Inquiry</option>
-                <option value="feature_request">Feature Request</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Tickets List */}
+        {/* Create Tickets List table*/}
         <div className="bg-white rounded-lg shadow-md">
           {tickets.length > 0 ? (
             <div className="overflow-x-auto">
@@ -503,7 +383,7 @@ const TicketsPage = () => {
                           <div className="text-sm font-medium text-gray-900">
                             {ticket.title}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-blue-500">
                             #{ticket.ticketNumber}
                           </div>
                         </div>
@@ -529,21 +409,15 @@ const TicketsPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex space-x-2">
-                          {/* <button
+                          
+                           <button
                             onClick={() => fetchTicketDetails(ticket._id)}
                             className="text-green-600 hover:text-green-900 text-sm font-medium"
                           >
                             View Details
-                          </button> */}
-                          {canDeleteTicket(ticket) && (
-                            <button
-                              onClick={() => setShowDeleteConfirm(ticket)}
-                              disabled={deletingTicketId === ticket._id}
-                              className="text-red-600 hover:text-red-900 text-sm font-medium disabled:opacity-50"
-                            >
-                              {deletingTicketId === ticket._id ? 'Deleting...' : 'Delete'}
-                            </button>
-                          )}
+                          </button> 
+                          
+                          
                         </div>
                       </td>
                     </tr>
