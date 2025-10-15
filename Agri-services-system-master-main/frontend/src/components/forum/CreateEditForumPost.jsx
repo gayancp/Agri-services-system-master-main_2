@@ -155,6 +155,7 @@ const CreateEditForumPost = () => {
             {error}
           </div>
         )}
+        {/*create new post*/}
 
         {/* Form */}
         <div className="bg-white rounded-lg shadow-sm p-6">
@@ -173,7 +174,7 @@ const CreateEditForumPost = () => {
                 required
                 maxLength={200}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Enter a descriptive title for your post..."
+                placeholder="Enter a descriptive title for your post"
               />
               <p className="text-sm text-gray-500 mt-1">
                 {formData.title.length}/200 characters
@@ -224,56 +225,6 @@ const CreateEditForumPost = () => {
               />
               <p className="text-sm text-gray-500 mt-1">
                 {formData.content.length}/5000 characters
-              </p>
-            </div>
-
-            {/* Tags */}
-            <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-                Tags (Optional)
-              </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={handleTagKeyPress}
-                  maxLength={30}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Add a tag..."
-                />
-                <button
-                  type="button"
-                  onClick={handleAddTag}
-                  disabled={!tagInput.trim() || formData.tags.length >= 5}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  Add
-                </button>
-              </div>
-              
-              {formData.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {formData.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
-                    >
-                      #{tag}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(tag)}
-                        className="ml-2 text-green-600 hover:text-green-800"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-              
-              <p className="text-sm text-gray-500">
-                Add up to 5 tags to help others find your post. Press Enter or click Add to add a tag.
               </p>
             </div>
 

@@ -11,10 +11,10 @@ const HomePage = () => {
       <section className="bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Fresh From Farm to Your Table
+            Powering Farmers with Machinery
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            Connect with local farmers, discover fresh produce, and support sustainable agriculture in Sri Lanka.
+            Connect with local service providers, discover modern machinery and support sustainable farming in Sri Lanka.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {/* Browse Products button removed */}
@@ -38,7 +38,7 @@ const HomePage = () => {
               Why Choose AgriServices?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We're building a sustainable agricultural ecosystem that benefits everyone in the supply chain.
+              Creating a modern farming ecosystem where reliable machinery supports every stage of agriculture.
             </p>
           </div>
 
@@ -52,7 +52,7 @@ const HomePage = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Direct Trading</h3>
               <p className="text-gray-600">
-                Connect directly with farmers and eliminate middlemen for better prices and fresher produce.
+                Connect directly with service providers and access machinery without middlemen for better value.
               </p>
             </div>
 
@@ -65,7 +65,7 @@ const HomePage = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Quality Assured</h3>
               <p className="text-gray-600">
-                All products are verified for quality and freshness with detailed information about origin and farming practices.
+                We ensure every farming tool meets quality standards, with clear details on performance and maintenance.
               </p>
             </div>
 
@@ -78,7 +78,7 @@ const HomePage = () => {
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Fast Delivery</h3>
               <p className="text-gray-600">
-                Quick and reliable delivery options to get fresh produce from farm to your doorstep.
+                Quick and reliable delivery of farming machinery and equipment directly to your farm.
               </p>
             </div>
           </div>

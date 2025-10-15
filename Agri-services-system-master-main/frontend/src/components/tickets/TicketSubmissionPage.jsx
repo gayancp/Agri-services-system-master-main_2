@@ -58,6 +58,7 @@ const TicketSubmissionPage = () => {
     }
 
     // Validate file types
+   
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf', 
                          'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                          'text/plain', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
@@ -110,7 +111,7 @@ const TicketSubmissionPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(`Ticket created successfully! Ticket Number: ${data.data.ticketNumber}`);
+        setSuccess(`Ticket created successfully!`);
         // Reset form
         setFormData({
           title: '',
@@ -144,6 +145,7 @@ const TicketSubmissionPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-4xl mx-auto px-4">
+
         {/* Header */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Submit Support Ticket</h1>
@@ -245,12 +247,13 @@ const TicketSubmissionPage = () => {
                 required
                 rows={6}
                 maxLength={2000}
-                placeholder="Please provide a detailed description of your issue, including any error messages, steps to reproduce, or additional context that would help us assist you."
+                placeholder="Please provide a detailed description of your issue"
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
+              {/*
               <p className="text-sm text-gray-500 mt-1">
-                {formData.description.length}/2000 characters
-              </p>
+                {formData.description.length}
+              </p>*/}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -265,7 +268,7 @@ const TicketSubmissionPage = () => {
                   name="relatedOrder"
                   value={formData.relatedOrder}
                   onChange={handleInputChange}
-                  placeholder="e.g., ORD-12345"
+                  placeholder="eg:ORD-12345"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                 />
               </div>
@@ -281,77 +284,15 @@ const TicketSubmissionPage = () => {
                   name="tags"
                   value={formData.tags}
                   onChange={handleInputChange}
-                  placeholder="e.g., payment, delivery, refund"
+                  placeholder="eg:payment/delivery/refund"
                   className="w-full p-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Separate tags with commas
+                  
                 </p>
               </div>
             </div>
 
-            {/* File Attachments */}
-            <div>
-              {/* <label htmlFor="attachments" className="block text-sm font-medium text-gray-700 mb-2">
-                Attachments (Optional)
-              </label> */}
-              {/* <div className="border-2 border-dashed border-gray-300 rounded-md p-6">
-                <div className="text-center">
-                  <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <div className="mt-4">
-                    <label htmlFor="attachments" className="cursor-pointer">
-                      <span className="mt-2 block text-sm font-medium text-gray-900">
-                        Click to upload files or drag and drop
-                      </span>
-                      <span className="mt-1 block text-sm text-gray-500">
-                        PNG, JPG, PDF, DOC up to 10MB (Max 5 files)
-                      </span>
-                    </label>
-                    <input
-                      id="attachments"
-                      name="attachments"
-                      type="file"
-                      multiple
-                      accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt,.xls,.xlsx"
-                      onChange={handleFileChange}
-                      className="sr-only"
-                    />
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Selected Files */}
-              {/* {attachments.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Files:</h4>
-                  <div className="space-y-2">
-                    {attachments.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                        <div className="flex items-center">
-                          <svg className="h-5 w-5 text-gray-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-sm text-gray-700">
-                            {file.name} ({formatFileSize(file.size)})
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeAttachment(index)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )} */}
-            </div>
 
             {/* Submit Button */}
             <div className="flex justify-end">
@@ -374,6 +315,9 @@ const TicketSubmissionPage = () => {
                   'Submit Ticket'
                 )}
               </button>
+
+              {/*<button class="new">Click Me</button>*/}
+
             </div>
           </form>
         </div>
@@ -385,9 +329,9 @@ const TicketSubmissionPage = () => {
             For urgent issues, you can also contact us directly:
           </p>
           <ul className="text-blue-700 space-y-1">
-            <li>📞 Phone: +1 (555) 123-4567</li>
+            <li>📞 Phone: 011-2522545</li>
             <li>📧 Email: support@agriservices.com</li>
-            <li>💬 Live Chat: Available 9 AM - 6 PM (Mon-Fri)</li>
+            <li>💬 Live Chat: Available 9 AM To 6 PM (Mon-Fri)</li>
           </ul>
         </div>
       </div>
