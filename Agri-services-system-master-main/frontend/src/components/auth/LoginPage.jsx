@@ -26,11 +26,16 @@ const LoginPage = () => {
     try {
       const result = await login(formData);
       toast.success('Login successful!');
+
+       console.log("User Id :"+result.user.id);   // Use Id eka Ganne me vidiyata.
+       
+
       const role = result?.user?.role || null;
-      if (role === 'farmer') {
+
+      if (role === 'farmer') {                    
         navigate('/');
       } else {
-        navigate('/dashboard');
+        navigate('/dashboard');       
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');

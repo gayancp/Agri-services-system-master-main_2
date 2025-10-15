@@ -119,7 +119,7 @@ const requireServiceProvider = (req, res, next) => {
   next();
 };
 
-// Check if user is farmer or admin
+
 const requireFarmer = (req, res, next) => {
   if (!['admin', 'farmer'].includes(req.user.role)) {
     return res.status(403).json({
@@ -130,7 +130,7 @@ const requireFarmer = (req, res, next) => {
   next();
 };
 
-// Optional authentication (for routes that work with or without auth)
+
 const optionalAuth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -158,7 +158,7 @@ const optionalAuth = async (req, res, next) => {
 
 module.exports = {
   authenticateToken,
-  requireAuth: authenticateToken, // alias for consistency
+  requireAuth: authenticateToken, 
   authorizeRoles,
   optionalAuth,
   requireAdmin,

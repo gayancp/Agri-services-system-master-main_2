@@ -18,10 +18,10 @@ const generateToken = (userId) => {
 // Register user
 const registerUser = async (req, res) => {
   try {
-    // Debug: log incoming body (avoid printing password in logs)
+
     const { password: _pw, ...safeBody } = req.body || {};
     console.log('Register request body (safe):', safeBody);
-    // Check for validation errors
+   
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log('Registration validation errors:', errors.array());
@@ -33,10 +33,10 @@ const registerUser = async (req, res) => {
     }
 
   const { firstName, lastName, email, password, phone, role, address, farmDetails } = req.body;
-  // Default role to 'farmer' if not provided
+  
   const normalizedRole = role || 'farmer';
 
-    // Check if user already exists
+  
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -102,7 +102,7 @@ const loginUser = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Find user and include password for comparison
+   
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(401).json({
@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Check if user is active (treat only explicit false as deactivated to avoid blocking legacy users)
+    
     if (user.isActive === false) {
       return res.status(401).json({
         success: false,
@@ -121,7 +121,7 @@ const loginUser = async (req, res) => {
 
     // Compare password
     if (!user.password) {
-      // Defensive: if password field missing on record, treat as invalid creds
+      
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password'
@@ -135,7 +135,6 @@ const loginUser = async (req, res) => {
       });
     }
 
-    // Update last login (best-effort; don't fail login if this write fails due to unrelated schema issues)
     try {
       user.lastLogin = new Date();
       await user.save();
@@ -247,7 +246,7 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-// Change password
+
 const changePassword = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -297,7 +296,7 @@ const changePassword = async (req, res) => {
   }
 };
 
-// Get all users (admin only)
+// Get all users 
 const getAllUsers = async (req, res) => {
   try {
     const {
@@ -373,7 +372,6 @@ const deleteAccount = async (req, res) => {
 
     console.log('User found:', user.email, 'isActive:', user.isActive);
 
-    // If already inactive, just respond success idempotently
     if (user.isActive === false) {
       console.log('User already inactive');
       return res.json({

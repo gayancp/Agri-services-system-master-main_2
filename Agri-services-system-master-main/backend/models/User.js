@@ -137,83 +137,82 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for efficient queries
+
 userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ 'farmDetails.location': '2dsphere' });
-// Use a sparse 2dsphere index so documents without a location are ignored by the index
+
 userSchema.index({ 'serviceProviderDetails.location': '2dsphere' }, { sparse: true });
 
-// Helper: validate GeoJSON Point
-function isValidGeoPoint(loc) {
-  return (
-    loc &&
-    typeof loc === 'object' &&
-    loc.type === 'Point' &&
-    Array.isArray(loc.coordinates) &&
-    loc.coordinates.length === 2 &&
-    typeof loc.coordinates[0] === 'number' &&
-    typeof loc.coordinates[1] === 'number'
-  );
-}
 
-// Cleanup invalid provider location before save
-userSchema.pre('save', async function(next) {
-  try {
-    // Hash password if modified
-    if (this.isModified('password')) {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-    }
 
-    // Sanitize invalid GeoJSON location
-    const loc = this?.serviceProviderDetails?.location;
-    if (loc && !isValidGeoPoint(loc)) {
-      // Remove invalid location to satisfy 2dsphere index
-      try {
-        if (this.serviceProviderDetails) {
-          delete this.serviceProviderDetails.location;
-          this.markModified('serviceProviderDetails');
-        }
-      } catch {}
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+//   return (
+//     loc &&
+//     typeof loc === 'object' &&
+//     loc.type === 'Point' &&
+//     Array.isArray(loc.coordinates) &&
+//     loc.coordinates.length === 2 &&
+//     typeof loc.coordinates[0] === 'number' &&
+//     typeof loc.coordinates[1] === 'number'
+//   );
+// }
 
-// Cleanup invalid provider location before findOneAndUpdate
-userSchema.pre('findOneAndUpdate', function(next) {
-  const update = this.getUpdate() || {};
-  const loc = update['serviceProviderDetails.location'] || (update.$set && update.$set['serviceProviderDetails.location']);
-  if (loc && !isValidGeoPoint(loc)) {
-    // Prefer unsetting the invalid location
-    update.$unset = { ...(update.$unset || {}), 'serviceProviderDetails.location': '' };
-    if (update.$set) delete update.$set['serviceProviderDetails.location'];
-    else delete update['serviceProviderDetails.location'];
-    this.setUpdate(update);
-  }
-  next();
-});
+// // Cleanup invalid provider location before save
+// userSchema.pre('save', async function(next) {
+//   try {
+//     // Hash password if modified
+//     if (this.isModified('password')) {
+//       const salt = await bcrypt.genSalt(10);
+//       this.password = await bcrypt.hash(this.password, salt);
+//     }
+
+//     // Sanitize invalid GeoJSON location
+//     const loc = this?.serviceProviderDetails?.location;
+//     if (loc && !isValidGeoPoint(loc)) {
+//       // Remove invalid location to satisfy 2dsphere index
+//       try {
+//         if (this.serviceProviderDetails) {
+//           delete this.serviceProviderDetails.location;
+//           this.markModified('serviceProviderDetails');
+//         }
+//       } catch {}
+//     }
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
+// // Cleanup invalid provider location before findOneAndUpdate
+// userSchema.pre('findOneAndUpdate', function(next) {
+//   const update = this.getUpdate() || {};
+//   const loc = update['serviceProviderDetails.location'] || (update.$set && update.$set['serviceProviderDetails.location']);
+//   if (loc && !isValidGeoPoint(loc)) {
+//     // Prefer unsetting the invalid location
+//     update.$unset = { ...(update.$unset || {}), 'serviceProviderDetails.location': '' };
+//     if (update.$set) delete update.$set['serviceProviderDetails.location'];
+//     else delete update['serviceProviderDetails.location'];
+//     this.setUpdate(update);
+//   }
+//   next();
+// });
 
 // Compare password method
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Get full name virtual
-userSchema.virtual('fullName').get(function() {
-  return `${this.firstName} ${this.lastName}`;
-});
 
-// Ensure virtual fields are serialized
-userSchema.set('toJSON', {
-  virtuals: true,
-  transform: function(doc, ret) {
-    delete ret.password;
-    return ret;
-  }
-});
+// userSchema.virtual('fullName').get(function() {
+//   return `${this.firstName} ${this.lastName}`;
+// });
+
+// userSchema.set('toJSON', {
+//   virtuals: true,
+//   transform: function(doc, ret) {
+//     delete ret.password;
+//     return ret;
+//   }
+// });
 
 module.exports = mongoose.model('User', userSchema);

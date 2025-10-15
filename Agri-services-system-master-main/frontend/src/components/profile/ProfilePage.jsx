@@ -282,6 +282,9 @@ Thank you for using our services!
   };
 
   return (
+
+
+
     <>
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
@@ -304,6 +307,8 @@ Thank you for using our services!
                 <Edit className="w-4 h-4" />
                 <span>Edit Profile</span>
               </button>
+
+
             ) : (
               <div className="flex space-x-2">
                 <button
@@ -314,6 +319,8 @@ Thank you for using our services!
                   <Save className="w-4 h-4" />
                   <span>{loading ? 'Saving...' : 'Save'}</span>
                 </button>
+
+
                 <button
                   onClick={handleCancel}
                   className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
@@ -323,6 +330,9 @@ Thank you for using our services!
                 </button>
               </div>
             )}
+
+
+            
             {user && (
               <button
                 onClick={() => setShowDeleteConfirm(true)}
@@ -334,6 +344,8 @@ Thank you for using our services!
             )}
             </div>
           </div>
+
+          
 
           {/* Tabs for farmers */}
           {user?.role === 'farmer' && (
@@ -386,11 +398,19 @@ Thank you for using our services!
           </div>
         )}
 
+
+
+
+
         <div className="space-y-6">
           {/* Show profile content for non-farmers or when profile tab is active */}
           {(user?.role !== 'farmer' || activeTab === 'profile') && (
             <>
-              {/* Basic Information */}
+
+
+
+
+              {/* Basic Information */}                                               
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-xl font-semibold mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2" />
@@ -473,6 +493,11 @@ Thank you for using our services!
             </div>
           </div>
 
+
+
+
+
+
           {/* Address Information */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-xl font-semibold mb-4 flex items-center">
@@ -533,6 +558,11 @@ Thank you for using our services!
               </div>
             </div>
           </div>
+
+
+
+
+
 
           {/* Service Provider Details */}
           {user?.role === 'service_provider' && (
@@ -660,6 +690,9 @@ Thank you for using our services!
             </div>
           )}
 
+
+
+
           {/* Farm Details for Farmers */}
           {user?.role === 'farmer' && user?.farmDetails && activeTab === 'profile' && (
             <div className="bg-white rounded-lg shadow-md p-6">
@@ -686,6 +719,9 @@ Thank you for using our services!
           )}
           </>
           )}
+
+
+
 
           {/* Service Bookings & Transactions Tab (Only for farmers) */}
           {user?.role === 'farmer' && activeTab === 'transactions' && (
@@ -780,6 +816,9 @@ Thank you for using our services!
         </div>
       </div>
     </div>
+
+
+
     {showDeleteConfirm && (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
@@ -800,6 +839,10 @@ Thank you for using our services!
             >
               Cancel
             </button>
+
+
+
+
             <button
               onClick={handleDeleteAccount}
               disabled={deleteLoading}

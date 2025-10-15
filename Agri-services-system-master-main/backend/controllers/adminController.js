@@ -31,7 +31,10 @@ const getAdminDashboard = async (req, res) => {
       { $group: { _id: null, total: { $sum: '$totalAmount' } } }
     ]);
 
-    const dashboardStats = {
+
+
+
+    const dashboardStats = {            // meken thama Admin Dashabord eke overview ekata Values tika set krnne.
       totalUsers,
       totalProducts,
       totalOrders,
@@ -58,7 +61,7 @@ const getAdminDashboard = async (req, res) => {
   }
 };
 
-// Get all users with advanced filtering
+
 const getAllUsers = async (req, res) => {
   try {
     const {
@@ -121,7 +124,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// Update user status (activate/deactivate)
+
 const updateUserStatus = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -168,7 +171,7 @@ const updateUserStatus = async (req, res) => {
   }
 };
 
-// Update user details (admin only)
+
 const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -192,7 +195,7 @@ const updateUser = async (req, res) => {
       });
     }
 
-    // Prevent changing your own role or deactivating yourself
+ 
     if (userId === req.user.userId) {
       if (role && role !== user.role) {
         return res.status(400).json({
@@ -208,7 +211,7 @@ const updateUser = async (req, res) => {
       }
     }
 
-    // Check if email is already taken by another user
+    
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ email, _id: { $ne: userId } });
       if (existingUser) {
@@ -219,7 +222,6 @@ const updateUser = async (req, res) => {
       }
     }
 
-    // Update user
     const updates = {};
     if (firstName) updates.firstName = firstName;
     if (lastName) updates.lastName = lastName;
@@ -255,12 +257,12 @@ const updateUser = async (req, res) => {
   }
 };
 
-// Delete user (admin only)
+
 const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Prevent deleting yourself
+  
     if (userId === req.user.userId) {
       return res.status(400).json({
         success: false,
@@ -292,7 +294,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// Get system reports
+
 const getSystemReports = async (req, res) => {
   try {
     const { type, startDate, endDate } = req.query;
@@ -381,7 +383,7 @@ const getSystemReports = async (req, res) => {
   }
 };
 
-// Get all service listings for admin review
+
 const getAllServiceListings = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, serviceType, search } = req.query;
@@ -432,7 +434,7 @@ const getAllServiceListings = async (req, res) => {
   }
 };
 
-// Get single service listing for admin review
+
 const getServiceListingForReview = async (req, res) => {
   try {
     const { listingId } = req.params;
@@ -461,10 +463,10 @@ const getServiceListingForReview = async (req, res) => {
   }
 };
 
-// Approve or reject service listing
+
 const updateServiceListingStatus = async (req, res) => {
   try {
-    // Check validation errors
+   
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -521,7 +523,7 @@ const updateServiceListingStatus = async (req, res) => {
   }
 };
 
-// Get service listings analytics for admin
+
 const getServiceListingsAnalytics = async (req, res) => {
   try {
     const analytics = await ServiceListing.aggregate([

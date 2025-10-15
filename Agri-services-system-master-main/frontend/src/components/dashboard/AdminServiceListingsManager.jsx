@@ -151,7 +151,7 @@ const AdminServiceListingsManager = () => {
       )}
 
       {/* Filters */}
-      {/* <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1">
           <input
             type="text"
@@ -192,7 +192,7 @@ const AdminServiceListingsManager = () => {
             <option value="other">Other</option>
           </select>
         </div>
-      </div> */}
+      </div> 
 
       {/* Listings Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">

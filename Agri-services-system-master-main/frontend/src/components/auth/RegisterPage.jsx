@@ -26,6 +26,35 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+  if (formData.firstName.length < 3) {
+      toast.error("First name must be at least 3 characters");
+      return;
+  }
+
+  if (formData.lastName.length < 3) {
+    toast.error("Last name must be at least 3 characters");
+    return;
+
+  }
+
+     if (!formData.email.includes("@")) {
+    toast.error("Please enter a valid email");
+    return;
+  }
+
+  if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+    toast.error("Phone number must be 10 digits");
+    return;
+  }
+  
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+  if (!passwordRegex.test(formData.password)) {
+    toast.error("Password must be at least 6 characters and include uppercase, lowercase, and number");
+    return;
+  }
+    
     
     if (formData.password !== formData.confirmPassword) {
       toast.error('Passwords do not match');
@@ -38,6 +67,9 @@ const RegisterPage = () => {
       const { confirmPassword, ...registerData } = formData;
       await register(registerData);
       toast.success('Registration successful!');
+           
+      
+
       navigate('/dashboard');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed');
@@ -146,7 +178,7 @@ const RegisterPage = () => {
               >
                 <option value="farmer">Farmer</option>
                 <option value="service_provider">Service Provider</option>
-                <option value="customer_service_rep">Customer Service Representative</option>
+                 <option value="customer_service_rep">Customer Service Representative</option>
                 <option value="admin">Administrator</option>
               </select>
             </div>
