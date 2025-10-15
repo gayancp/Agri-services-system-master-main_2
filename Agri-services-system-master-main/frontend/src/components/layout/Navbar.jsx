@@ -35,12 +35,11 @@ const Navbar = () => {
             >
               Services
             </Link>
-            {/* <Link 
-              to="/forum" 
+             <Link to="/forum" 
               className="text-gray-700 hover:text-green-600 font-medium transition-colors"
             >
               Forum
-            </Link> */}
+            </Link> 
             {/* Products link removed */}
             
             {isAuthenticated ? (
@@ -71,14 +70,14 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <Link 
+                {/* <Link 
                   to="/cart" 
                   className="text-gray-700 hover:text-green-600 transition-colors"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4-2v0M7 13L5.4 5H4v0m0 0V3m3 10v8a2 2 0 002 2h10a2 2 0 002-2v-8" />
                   </svg>
-                </Link>
+                </Link> */}
                 
                 <div className="relative group">
                   <button className="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition-colors">
@@ -118,12 +117,11 @@ const Navbar = () => {
                     >
                       Submit Ticket
                     </Link>
-                    {/* <Link 
-                      to="/forum" 
+                     <Link to="/forum" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Forum
-                    </Link> */}
+                    </Link> 
                     <button 
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

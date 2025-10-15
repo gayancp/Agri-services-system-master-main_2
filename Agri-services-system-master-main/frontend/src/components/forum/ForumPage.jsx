@@ -156,17 +156,6 @@ const ForumPage = () => {
                 ))}
               </select>
 
-              {/* Sort Filter */}
-              <select
-                value={filter.sortBy}
-                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              >
-                <option value="lastActivity">Latest Activity</option>
-                <option value="createdAt">Newest Posts</option>
-                <option value="views">Most Viewed</option>
-                <option value="commentCount">Most Discussed</option>
-              </select>
             </div>
           </div>
         </div>

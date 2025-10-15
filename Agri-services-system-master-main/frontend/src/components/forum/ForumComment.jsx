@@ -109,7 +109,7 @@ const ForumComment = ({ comment, postId, currentUser, onUpdate, onDelete }) => {
           </svg>
         </div>
         <div className="flex-1">
-          <p className="text-gray-500 italic">[This comment has been deleted]</p>
+          <p className="text-gray-500 italic">[This comment has been deleted ]</p>
         </div>
       </div>
     );
@@ -200,7 +200,7 @@ const ForumComment = ({ comment, postId, currentUser, onUpdate, onDelete }) => {
           )}
         </div>
         
-        {/* Comment Actions */}
+        {/* Comment Actions 
         <div className="flex items-center gap-4 mt-2 text-sm">
           <button
             onClick={handleLike}

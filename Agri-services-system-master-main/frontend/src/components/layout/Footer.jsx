@@ -89,7 +89,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-gray-300">
-            © 2025 AgriServices. All rights reserved. Built with ❤️ for Sri Lankan agriculture.
+            © 2025 AgriServices. All rights reserved. Built with ❤ for Sri Lankan agriculture.
           </p>
         </div>
       </div>

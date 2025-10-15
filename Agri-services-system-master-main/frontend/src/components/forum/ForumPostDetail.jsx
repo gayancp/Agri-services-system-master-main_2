@@ -302,7 +302,7 @@ const ForumPostDetail = () => {
               </div>
             )}
 
-            {/* Like Button */}
+            {/* Like Button 
             <div className="border-t pt-4">
               <button
                 onClick={handleLike}
@@ -322,7 +322,9 @@ const ForumPostDetail = () => {
                 </svg>
                 {liked ? 'Liked' : 'Like'} ({likeCount})
               </button>
+              
             </div>
+            */}
           </div>
         </div>
 

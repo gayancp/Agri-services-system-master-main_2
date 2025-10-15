@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Cookies from 'js-cookie';
+import jsPDF from "jspdf";
 import { 
   Calendar, 
   Clock, 
@@ -96,50 +97,73 @@ const OrdersPage = () => {
     );
   };
 
-  const downloadReceipt = (booking) => {
-    const receiptContent = `
-AGRICULTURAL SERVICES RECEIPT
-============================
 
-Transaction ID: ${booking.payment.transactionId}
-Booking Number: ${booking.bookingNumber}
-Date: ${new Date(booking.payment.paidAt).toLocaleDateString()}
 
-Service Details:
-- Service: ${booking.serviceDetails.title}
-- Type: ${booking.serviceDetails.serviceType}
-- Date: ${new Date(booking.booking.date).toLocaleDateString()}
-- Time: ${booking.booking.time}
+const downloadReceipt = (booking) => {
+  const doc = new jsPDF();
+  const lineHeight = 8;
+  let y = 20;
 
-Provider:
-- Name: ${booking.serviceProvider.firstName} ${booking.serviceProvider.lastName}
-- Email: ${booking.serviceProvider.email}
-- Phone: ${booking.serviceProvider.phone}
-
-Customer:
-- Name: ${booking.customer.firstName} ${booking.customer.lastName}
-- Email: ${booking.customer.email}
-
-Payment:
-- Amount: ${booking.pricing.currency} ${booking.pricing.finalAmount}
-- Method: ${booking.payment.method.toUpperCase()}
-- Status: ${booking.payment.status.toUpperCase()}
-
-Status: ${booking.status.toUpperCase()}
-
-Thank you for using our Agricultural Services platform!
-    `;
-
-    const blob = new Blob([receiptContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `receipt-${booking.bookingNumber}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+  const addLine = (text, bold = false) => {
+    if (bold) doc.setFont("helvetica", "bold");
+    else doc.setFont("helvetica", "normal");
+    doc.text(text, 20, y);
+    y += lineHeight;
   };
+
+  // Title
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  addLine("AGRICULTURAL SERVICES RECEIPT");
+  y += 5;
+  doc.setFontSize(12);
+  addLine("============================");
+
+  // Transaction details
+  addLine(`Transaction ID: ${booking.payment.transactionId}`);
+  addLine(`Booking Number: ${booking.bookingNumber}`);
+  addLine(`Date: ${new Date(booking.payment.paidAt).toLocaleDateString()}`);
+  y += 5;
+
+  // Service details
+  addLine("Service Details:", true);
+  addLine(`- Service: ${booking.serviceDetails.title}`);
+  addLine(`- Type: ${booking.serviceDetails.serviceType}`);
+  addLine(`- Date: ${new Date(booking.booking.date).toLocaleDateString()}`);
+  addLine(`- Time: ${booking.booking.time}`);
+  y += 5;
+
+  // Provider
+  addLine("Provider:", true);
+  addLine(`- Name: ${booking.serviceProvider.firstName} ${booking.serviceProvider.lastName}`);
+  addLine(`- Email: ${booking.serviceProvider.email}`);
+  addLine(`- Phone: ${booking.serviceProvider.phone}`);
+  y += 5;
+
+  // Customer
+  addLine("Customer:", true);
+  addLine(`- Name: ${booking.customer.firstName} ${booking.customer.lastName}`);
+  addLine(`- Email: ${booking.customer.email}`);
+  y += 5;
+
+  // Payment
+  addLine("Payment:", true);
+  addLine(`- Amount: ${booking.pricing.currency} ${booking.pricing.finalAmount}`);
+  addLine(`- Method: ${booking.payment.method.toUpperCase()}`);
+  addLine(`- Status: ${booking.payment.status.toUpperCase()}`);
+  y += 5;
+
+  // Status
+  addLine(`Status: ${booking.status.toUpperCase()}`);
+  y += 10;
+
+  // Footer
+  addLine("Thank you for using our Agricultural Services platform!", true);
+
+  // Save as PDF
+  doc.save(`receipt-${booking.bookingNumber}.pdf`);
+};
+
 
   const handleCancelBooking = async () => {
     if (!selectedBooking) return;
