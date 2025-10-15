@@ -71,14 +71,14 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
-                <Link 
+                {/* <Link 
                   to="/cart" 
                   className="text-gray-700 hover:text-green-600 transition-colors"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4-2v0M7 13L5.4 5H4v0m0 0V3m3 10v8a2 2 0 002 2h10a2 2 0 002-2v-8" />
                   </svg>
-                </Link>
+                </Link> */}
                 
                 <div className="relative group">
                   <button className="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition-colors">
