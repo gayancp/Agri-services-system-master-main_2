@@ -462,7 +462,7 @@ const generateReport = async (req, res) => {
       if (serviceListings.length > 0) {   
         serviceListings.forEach((listing, index) => {
           doc.fontSize(12)
-            .text(`${index + 1}. ${listing.title || 'N/A'} - Title: ${listing.serviceType || 'N/A'} - Status: ${listing.status}`);
+            .text(`${index + 1}. ${listing.title || 'N/A'} - Type: ${listing.serviceType || 'N/A'} - Status: ${listing.status}`);
           doc.moveDown(0.2);
         }); 
       } else {
