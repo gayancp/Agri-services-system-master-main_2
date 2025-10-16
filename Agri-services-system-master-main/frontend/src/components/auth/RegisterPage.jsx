@@ -178,8 +178,8 @@ const RegisterPage = () => {
               >
                 <option value="farmer">Farmer</option>
                 <option value="service_provider">Service Provider</option>
-                 <option value="customer_service_rep">Customer Service Representative</option>
-                <option value="admin">Administrator</option>
+                 {/* <option value="customer_service_rep">Customer Service Representative</option>
+                <option value="admin">Administrator</option> */}
               </select>
             </div>
             
